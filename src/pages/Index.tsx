@@ -48,72 +48,19 @@ const Index = () => {
     },
   ]);
 
-  const totalRDMs = products.reduce((acc, product) => acc + product.rdms.length, 0);
-  const completedRDMs = products.reduce(
-    (acc, product) => acc + product.rdms.filter(rdm => rdm.status === "completed").length,
-    0
-  );
-  const inProgressRDMs = products.reduce(
-    (acc, product) => acc + product.rdms.filter(rdm => rdm.status === "in-progress").length,
-    0
-  );
+  // Cores únicas para cada produto
+  const productColors = [
+    { primary: "hsl(var(--primary))", light: "hsl(var(--primary) / 0.2)" },
+    { primary: "hsl(var(--info))", light: "hsl(var(--info) / 0.2)" },
+    { primary: "hsl(var(--success))", light: "hsl(var(--success) / 0.2)" },
+    { primary: "hsl(var(--warning))", light: "hsl(var(--warning) / 0.2)" },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
       <TimelineHeader />
       
       <div className="container mx-auto px-6 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 animate-slide-in">
-          <Card className="p-6 shadow-soft hover:shadow-medium transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Total de RDMs</p>
-                <p className="text-3xl font-bold text-foreground mt-1">{totalRDMs}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center">
-                <Clock className="w-6 h-6 text-primary-foreground" />
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 shadow-soft hover:shadow-medium transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Concluídas</p>
-                <p className="text-3xl font-bold text-success mt-1">{completedRDMs}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-success to-success/80 flex items-center justify-center">
-                <div className="w-3 h-3 rounded-full bg-success-foreground"></div>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 shadow-soft hover:shadow-medium transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Em Andamento</p>
-                <p className="text-3xl font-bold text-warning mt-1">{inProgressRDMs}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-warning to-warning/80 flex items-center justify-center animate-pulse-soft">
-                <div className="w-3 h-3 rounded-full bg-warning-foreground"></div>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6 shadow-soft hover:shadow-medium transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground font-medium">Produtos</p>
-                <p className="text-3xl font-bold text-info mt-1">{products.length}</p>
-              </div>
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-info to-info/80 flex items-center justify-center">
-                <div className="w-3 h-3 rounded-full bg-info-foreground"></div>
-              </div>
-            </div>
-          </Card>
-        </div>
-
         {/* Timeline Section */}
         <Card className="p-6 shadow-medium">
           <div className="flex items-center justify-between mb-6">
@@ -156,6 +103,7 @@ const Index = () => {
                 key={product.id} 
                 product={product}
                 index={index}
+                color={productColors[index % productColors.length]}
               />
             ))}
           </div>
