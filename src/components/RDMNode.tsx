@@ -12,35 +12,10 @@ interface RDMNodeProps {
   rdm: RDM;
   index: number;
   total: number;
+  color: string;
 }
 
-const RDMNode = ({ rdm, index, total }: RDMNodeProps) => {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "bg-success";
-      case "in-progress":
-        return "bg-warning";
-      case "pending":
-        return "bg-muted-foreground";
-      default:
-        return "bg-muted";
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "completed":
-        return <CheckCircle2 className="w-3 h-3 text-success-foreground" />;
-      case "in-progress":
-        return <Clock className="w-3 h-3 text-warning-foreground" />;
-      case "pending":
-        return <Circle className="w-3 h-3 text-muted-foreground" />;
-      default:
-        return null;
-    }
-  };
-
+const RDMNode = ({ rdm, index, total, color }: RDMNodeProps) => {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case "completed":
@@ -54,40 +29,26 @@ const RDMNode = ({ rdm, index, total }: RDMNodeProps) => {
     }
   };
 
-  // Calculate spacing between nodes
-  const spacing = total > 3 ? "w-32" : "w-40";
-
   return (
     <div 
-      className={`flex-shrink-0 ${spacing} animate-slide-in`}
+      className="flex-shrink-0 animate-slide-in"
       style={{ animationDelay: `${(index + 1) * 150}ms` }}
     >
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="relative group cursor-pointer">
+            <div className="relative group cursor-pointer flex flex-col items-center">
               {/* Node Circle */}
-              <div className={`
-                w-9 h-9 rounded-full ${getStatusColor(rdm.status)} 
-                flex items-center justify-center
-                shadow-medium hover:shadow-strong
-                transition-all duration-300
-                hover:scale-110
-                relative z-10
-                ${rdm.status === "in-progress" ? "animate-pulse-soft" : ""}
-              `}>
-                {getStatusIcon(rdm.status)}
+              <div 
+                className="w-11 h-11 rounded-full bg-background border-[3px] flex items-center justify-center shadow-medium hover:shadow-strong transition-all duration-300 hover:scale-110 relative z-10"
+                style={{ borderColor: color }}
+              >
               </div>
 
-              {/* Time Label */}
-              <div className="mt-3 text-center">
-                <p className="text-xs font-semibold text-foreground">{rdm.time}</p>
-                <Badge 
-                  variant="outline" 
-                  className="mt-1 text-[10px] px-1.5 py-0 h-5"
-                >
-                  {rdm.id}
-                </Badge>
+              {/* Info Below */}
+              <div className="mt-4 text-center max-w-[120px]">
+                <p className="text-[10px] font-medium text-muted-foreground mb-1">{rdm.time}</p>
+                <p className="text-[11px] text-foreground leading-tight">{rdm.id}</p>
               </div>
             </div>
           </TooltipTrigger>
